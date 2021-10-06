@@ -90,8 +90,8 @@ const peerServer = ExpressPeerServer(http, {
 
 
 app.use('/peerjs', peerServer)
-peerServer.on('connection', (client) => {console.log('new client: ', client.id)})
-peerServer.on('disconnect', (client) => { console.log('client disconnected: ', client.id)});
+peerServer.on('connection', (client) => {console.log('new PEER client: ', client.id)})
+peerServer.on('disconnect', (client) => { console.log('PEER client disconnected: ', client.id)});
 
 
 

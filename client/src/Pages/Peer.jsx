@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import Peer from 'peerjs'
-import { Link } from 'react-router-dom';
-
+import { Link, Redirect } from 'react-router-dom';
 import  Button  from '@mui/material/Button';
 
 
@@ -9,11 +8,13 @@ export default function PeerView({location}) {
     const peer = useRef(null)
     const {state} = location  
     const {id, friend} = state
+    
 
     const [connected, setConnected] = useState(false)
     const connectionRef = useRef(null)
     const videoRef = useRef(null)
     const ownVideo = useRef(null)
+    const callRef = useRef(null)
 
     const stopVideo = () => {
         console.log('STOP VIDEO ')
@@ -25,6 +26,11 @@ export default function PeerView({location}) {
           console.log('STOP TRACK: ', track)
           track.stop();
         });
+        callRef.current.close()
+        console.log('THE CALLREF IS CLOSED? ',callRef.current)
+        peer.current.destroy()
+       
+        
     }
 
     const startVideo = async() => {
@@ -32,9 +38,10 @@ export default function PeerView({location}) {
             if (!videoRef.current.srcObject){
                 console.log('VIDEO CAN START')
                 const stream = await navigator.mediaDevices.getUserMedia({audi: false, video: true, })
+                console.log('STREAM: ',stream, 'PEER who wants Video: ', peer.current)
                 ownVideo.current.srcObject = stream
-                let call = peer.current.call(friend, stream);
-                call.on('stream', async (remoteStream) => {
+                callRef.current = peer.current.call(friend, stream);
+                callRef.current.on('stream', async (remoteStream) => {
                     videoRef.current.srcObject = remoteStream
                 })
             }
@@ -52,6 +59,7 @@ export default function PeerView({location}) {
 
 //Initialising the peer 
     useEffect(() => {
+        console.log('PPER SHOULD BE CREATED!!: ', peer.current)
         peer.current= new Peer(id, {
             host: 'localhost',
             port: 5000,
@@ -60,18 +68,27 @@ export default function PeerView({location}) {
                 {url: 'stun:stun.l.google.com:19302'}
             ]}
         })
-    },[])
+        //Try to connect to other
+        connectionRef.current = peer.current.connect(friend)
+        console.log('TRY to connect to other peer ', connectionRef.current)
+        peer.current.on('connection', function(conn){
+             console.log('connected!!')
+             setConnected(true)
+            //  startVideo()
+            //  connectionRef.current = conn
+        console.log('CREATED: ', peer.current)
+    })
+},[])
 
 
 //Event Listener for incoming peer requests
     useEffect(() => {
         // connectionRef.current = peer.current.connect(friend)
-        
-        peer.current.on('connection', function(conn){
-            console.log('connected!!')
-            setConnected(true)
-            startVideo()
-            connectionRef.current = conn
+        // peer.current.on('connection', function(conn){
+        //      console.log('connected!!')
+        //      setConnected(true)
+        //      startVideo()
+        //      connectionRef.current = conn
            
             //NOT NEEDED ONLY FOR DATA CONNECTION
             // connectionRef.current.on('open', () => {
@@ -80,14 +97,15 @@ export default function PeerView({location}) {
                 //     console.log('DATA ARRIVED')
                 //     })
             // })
-        })
+        // })
 
         peer.current.on('call', async (call) => {
+            callRef.current = call
             setConnected(true)
             const stream = await navigator.mediaDevices.getUserMedia({audi: false, video: true, })
             ownVideo.current.srcObject = stream
-            call.answer(stream)
-            call.on('stream', (remoteStream) => {
+            callRef.current.answer(stream)
+            callRef.current.on('stream', (remoteStream) => {
                 videoRef.current.srcObject = remoteStream
             })
         })
@@ -116,13 +134,13 @@ export default function PeerView({location}) {
     return (
         <div>
              <h1>VideoChat with {friend}</h1>
-             <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}}>
+             <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}} onClick={stopVideo}>
                 <p>BACK...</p>
             </Link>
-            {/* {!connected && <h3>Please wait for your video peer... Again a spinner would be great!</h3>}   */}
+             {!connected && <h3>Please wait for your video peer... Again a spinner would be great!</h3>}   
         
             <Button onClick={startVideo} variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Start Video</Button>
-            <Button onClick={stopVideo}>StopVideo</Button>
+            {/* <Button onClick={stopVideo}>StopVideo</Button> */}
             <video style={{transform: "scaleX(-1)", height: '300px', width: '300px'}} ref={videoRef} onCanPlay={handleCanPlay} autoPlay playsInline muted />
             <video style={{display: 'none'}} ref={ownVideo} />
         </div>
