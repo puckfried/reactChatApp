@@ -26,7 +26,7 @@ export default function Chat({location}) {
     const [privateRoom, setPrivateRoom] = useState(null)
     const [friend, setFriend] = useState(null)
 
-
+    //sending Messages depending if private or group
     const sendMsg = () => {
         const string = `${user.userName}: ${input}`
         const tmpArray = [...msgHistory, string]  
@@ -44,19 +44,20 @@ export default function Chat({location}) {
           setInput('')
       }
 
-
+    //Income Messages will be added to the history and displayed
       const handleIncomeMsg = (data) => {
         setMsgHistory((prevState) => [...prevState, data])
     }
 
 
+    //after finishing handshake setting privateRoom
     const handlePrivateHandshake = (data) => {
         setPrivateRoom(data)
         console.log('PrivateRoom is setted', data)
 
     }
 
-
+    //Manage the private Chat registration 
     useEffect( () => {
         if (type === 'requestPrivatChat'){
             console.log('Private chat requested')
@@ -73,13 +74,13 @@ export default function Chat({location}) {
     },[])
 
 
+    // telling server this socket is now in group chat
     useEffect(() =>  {
         if (type === 'groupChat') socket.emit('newGroup', [ user])
-       
-       
-        
     },[socket])
 
+
+    //Starting listeners for incoming Messaged
     useEffect(() => {
         socket.on('groupMsg', handleIncomeMsg)
         socket.on('privateHandshake', handlePrivateHandshake)
@@ -96,7 +97,7 @@ export default function Chat({location}) {
             <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}}>
                 <p>BACK...</p>
             </Link>
-           {!privateRoom ?
+           {!privateRoom && type!=='groupChat' ?
            
            <>
             <h3>Waiting for your socket friend... A spinner would be nice!</h3>
