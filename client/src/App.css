@@ -1,0 +1,24 @@
+.iconRotate:hover {
+    transform: rotate(360deg);
+    transition: transform 1s
+}
+
+.iconScale:hover {
+    transform: scale(1.4);
+    transition: transform 1s
+}
+
+
+.bubble {
+    border: 1px solid blue;
+    border-radius: 20px;
+    margin: 10px;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
