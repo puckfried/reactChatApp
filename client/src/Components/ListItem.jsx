@@ -25,11 +25,12 @@ export default function ListItemComponent({user, index, ownId}) {
                     <CommentIcon />
                 </IconButton>
             </Link>
-             <Link to={{
+            
+            <Link to={{
                 pathname: `/peer/`,
-                state: {id: ownId, friend: user }
+                state: {id: ownId, friend: user, type: 'requestVideo' }
                 }}
-                 >
+                >
                 <IconButton edge="end" aria-label="comments" style={{color: 'red'}}>
                     <VideoCameraFrontIcon />
                 </IconButton>

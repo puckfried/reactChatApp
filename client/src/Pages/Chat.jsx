@@ -61,7 +61,7 @@ export default function Chat({location}) {
     useEffect( () => {
         if (type === 'requestPrivatChat'){
             console.log('Private chat requested')
-            socket.emit('private', to)
+            socket.emit('private', {theOther: to, type: 'chatRequest'})
             setFriend(to)
         }
 

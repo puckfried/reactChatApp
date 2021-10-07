@@ -19,6 +19,8 @@ export default function Main() {
     const socket = useContext(SocketContext)
     const [activeUser, setActiveUser] = useState([])
     const [privateChat, setPrivateChat] = useState(false)
+    const [privateVideo, setPrivateVideo] = useState(false)
+    
     const [privateRequest, setPrivateRequest] = useState('')
 
     const handleShake = data => {
@@ -32,6 +34,12 @@ export default function Main() {
         console.log('Hey there is a private request!!!', data)
     }
 
+    const handleVideoRequest = (data) => {
+        setPrivateVideo(true)
+        setPrivateRequest(data)
+        console.log('Hey there is a Video request!!!', data)
+    }
+
     useEffect(() =>  {
         socket.emit('register', user)
         console.log('This is the registration hook', socket)
@@ -40,7 +48,8 @@ export default function Main() {
 
     useEffect(() => {
         socket.on('handshake', handleShake)
-        socket.on('privatRequest', handleprivatRequest)
+        socket.on('chatRequest', handleprivatRequest)
+        socket.on('videoRequest', handleVideoRequest)
         return () => {
             socket.off('handshake', handleShake)
             socket.off('privaeRequest', handleprivatRequest)
@@ -76,6 +85,15 @@ export default function Main() {
                     state: {type: 'acceptPrivateRequest', to: privateRequest}
                     }} style={{textDecoration: 'none'}}>
                     <Button variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
+            
+            {privateVideo ? 
+                <Link to={{
+                    pathname: `/peer/`,
+                    state: {id: socket.id, friend: privateRequest }
+                    }} style={{textDecoration: 'none'}}>
+                    <Button variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
+
+            
             </Stack>
         </Grid>
     )

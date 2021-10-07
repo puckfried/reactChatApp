@@ -1,13 +1,15 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useContext } from 'react'
+import { SocketContext } from '../context/socket'
 import Peer from 'peerjs'
 import { Link, Redirect } from 'react-router-dom';
 import  Button  from '@mui/material/Button';
 
 
 export default function PeerView({location}) {
+    const socket = useContext(SocketContext)
     const peer = useRef(null)
     const {state} = location  
-    const {id, friend} = state
+    const {id, friend, type} = state
     
 
     const [connected, setConnected] = useState(false)
@@ -16,6 +18,11 @@ export default function PeerView({location}) {
     const ownVideo = useRef(null)
     const callRef = useRef(null)
 
+    
+    const requestVideo = () => {
+        
+    }
+    
     const stopVideo = () => {
         console.log('STOP VIDEO ')
         ownVideo.current.srcObject.getTracks().forEach(track => {
@@ -59,7 +66,9 @@ export default function PeerView({location}) {
 
 //Initialising the peer 
     useEffect(() => {
-        console.log('PPER SHOULD BE CREATED!!: ', peer.current)
+        if (type==='requestVideo'){
+            socket.emit('private', {theOther: friend, type: 'videoRequest'})}
+        
         peer.current= new Peer(id, {
             host: 'localhost',
             port: 5000,
@@ -68,16 +77,26 @@ export default function PeerView({location}) {
                 {url: 'stun:stun.l.google.com:19302'}
             ]}
         })
+        //PEERJS Error handler
+        peer.current.on('error', function(error){
+            console.log('EEEERRRRRORRRRR: ', error)
+        })
+
         //Try to connect to other
         connectionRef.current = peer.current.connect(friend)
         console.log('TRY to connect to other peer ', connectionRef.current)
-        peer.current.on('connection', function(conn){
-             console.log('connected!!')
-             setConnected(true)
-            //  startVideo()
-            //  connectionRef.current = conn
-        console.log('CREATED: ', peer.current)
-    })
+        connectionRef.current.on('open', function(){
+            console.log('connected with data connection')
+            setConnected(true)
+            // startVideo()
+        })
+    //     peer.current.on('connection', function(conn){
+    //          console.log('connected!!')
+    //          setConnected(true)
+    //         //  startVideo()
+    //         //  connectionRef.current = conn
+    //     console.log('CREATED: ', peer.current)
+    // })
 },[])
 
 

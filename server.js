@@ -39,9 +39,10 @@ const newSocketConnection = (socket) => {
     }
 
     const startPrivateChat = data => {
+        const {theOther, type} = data
         console.log(socket.id, ' opened room for ', data )
         socket.join(`private-${socket.id}`)
-        socket.to(data).emit('privatRequest', socket.id, 'Lets talk')
+        socket.to(theOther).emit(`${type}`, socket.id, 'Lets talk')
     }
 
     const joinPrivateChat = data => {
