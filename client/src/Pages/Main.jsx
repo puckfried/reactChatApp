@@ -1,16 +1,10 @@
-import React, {useEffect, useContext, useState, useCallback} from 'react'
+import React, {useEffect, useContext, useState} from 'react'
 import { Link } from 'react-router-dom';
 import { SocketContext } from '../context/socket'
 import { UserContext } from '../context/user';
 import { Button, Stack } from '@mui/material';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import CommentIcon from '@mui/icons-material/Comment';
 import { Grid } from '@mui/material'
 import ListItemComponent from '../Components/ListItem';
 
@@ -42,7 +36,6 @@ export default function Main() {
 
     useEffect(() =>  {
         socket.emit('register', user)
-        console.log('This is the registration hook', socket)
     },[])
 
 

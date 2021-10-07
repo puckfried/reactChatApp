@@ -128,12 +128,6 @@ export default function Chat({location}) {
                 <SendIcon />
             </IconButton>
          
-            {/* <Link to={{pathname: `/peer`, state: {id: socket.id, friend:friend}}}  style={{textDecoration: 'none'}}>
-                <Button variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Go Peer</Button>
-            </Link> */}
-         
-         
-          
            </Paper>
            </>
             }
