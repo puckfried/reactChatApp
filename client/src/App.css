@@ -8,17 +8,35 @@
     transition: transform 1s
 }
 
+.chatWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 
 .bubble {
     border: 1px solid blue;
     border-radius: 20px;
     margin: 10px;
+    background-color: #274472;
+    margin: 15px;
+    width: 50%;
 }
 
-.left {
-    text-align: left;
+
+.chatMsg {
+    padding: 5px;
+    color: white;
+    font-weight: 600;
 }
 
 .right {
+    align-self: flex-end;
     text-align: right;
+}
+
+.left {
+    align-self: flex-start;
+    text-align: left;
 }

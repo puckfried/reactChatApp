@@ -28,7 +28,7 @@ export default function Chat({location}) {
 
     //sending Messages depending if private or group
     const sendMsg = () => {
-        const string = `${user.userName}: ${input}`
+        const string = {msg: `${user.userName}: ${input}`, user: user.userName}
         const tmpArray = [...msgHistory, string]  
         setMsgHistory(() => tmpArray)
         if (type=== 'groupChat'){
@@ -47,6 +47,7 @@ export default function Chat({location}) {
     //Income Messages will be added to the history and displayed
       const handleIncomeMsg = (data) => {
         setMsgHistory((prevState) => [...prevState, data])
+        console.log(data, user.userName)
     }
 
 
@@ -89,8 +90,6 @@ export default function Chat({location}) {
     },[socket])
 
     
-    
-
     return (
         <Grid item margin='50px'>
             {/* Private ROOM must be be closed here */}
@@ -105,13 +104,21 @@ export default function Chat({location}) {
            :
            <>
            <h3>private chat with {friend}</h3>
+           <div className='chatWrapper'>
            {msgHistory ? msgHistory.map((element, index) => {
                 return(
-                    <div className='bubble'>
-                        <p>{element}</p></div>   
+                        <>
+                        {element.user === user.userName ?
+                           <div className='bubble left'><p className='chatMsg'>{element.msg}</p></div> :
+                           <div className='bubble right'><p className='chatMsg right'>{element.msg}</p></div>
+                        }  
+                        </>
                         )
+
                     })
                 : <></>}
+           </div>
+
            <Paper
             component="form"
             sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}

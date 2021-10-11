@@ -1,7 +1,7 @@
 import React, {useState, useContext} from 'react'
 import { Grid, Box, TextField, FormControl, Button } from '@mui/material'
 import { UserContext } from '../context/user'
-import {fetchUserData} from '../helpers/dbFunc.js'
+import {loginUser} from '../helpers/dbFunc.js'
 
 function Login() {
     
@@ -11,9 +11,9 @@ function Login() {
     
     const handleSubmit = (e) => {
         e.preventDefault()
-        const data = fetchUserData(userInput, pwInput)
+        const data = loginUser(userInput, pwInput)
         setUser(data)
-        console.log(userInput, user)
+        console.log(userInput, data)
     }
     
     return (

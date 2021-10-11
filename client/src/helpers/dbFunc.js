@@ -18,3 +18,43 @@ export const fetchUserData = (userInput, pwInput) => {
 
     return data
 }
+const serverUrl = 'http://localhost:5000'
+
+
+export const loginUser = async (user, pw) => {
+    const data = {
+        username: user,
+        password: pw    
+    }
+    console.log('LOGIN STARTED!', data)
+    try {
+        const res = await (
+        await fetch(`${serverUrl}/user/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          credentials: 'include',
+        })
+      ).json();
+      return res;
+    } catch (error) {
+      return error;
+    }
+  };
+  
+
+
+export const authenticateUser = async() => {
+    try {
+        const res = await (
+          await fetch(`${serverUrl}/user/auth`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+          })
+        ).json();
+        return res;
+      } catch (error) {
+        return error;
+      }
+}

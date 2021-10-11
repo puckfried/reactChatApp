@@ -39,7 +39,7 @@ function App() {
 
        <Grid item xs={12}>  
         <Switch>
-         {user.userName ?
+         {user.username ?
             <Route exact path='/' component={Main} /> :
             <>
             <Route exact path='/' component={Login} />

@@ -1,4 +1,6 @@
-import React, {createContext, useState} from "react";
+import React, {createContext, useEffect, useState} from "react";
+import { authenticateUser } from "../helpers/dbFunc";
+
 
 export const UserContext = createContext()
 
@@ -10,8 +12,29 @@ const UserProvider = ( {children} ) => {
         friends: []
     })
     
-    const exportData = {user, setUser}
+    const [authIsDone, setAuthIsDone ] = useState(false)
+    const exportData = {user, setUser, authIsDone, setAuthIsDone}
 
+
+    useEffect( () => {
+        const authMe = async () => {
+        try {
+          const res = await authenticateUser();
+  
+          if (!res.error) {
+            setUser(res);
+            setAuthIsDone(true);
+            return;
+          }
+          setUser();
+          setAuthIsDone(true);
+        } catch (error) {
+            console.log(error)
+        }
+      };
+  
+      authMe();
+},[])
 
 return (
     <UserContext.Provider value={exportData}>

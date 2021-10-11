@@ -52,7 +52,7 @@ export default function Main() {
     
     return (
         <Grid item margin="50px" >
-            <h3>Welcome back {socket.id}</h3>
+            <h3>Welcome back {user.username}</h3>
             <p>Other Socks online:</p>
             <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 {activeUser.map((element, index) => {
