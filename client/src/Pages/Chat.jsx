@@ -28,7 +28,7 @@ export default function Chat({location}) {
 
     //sending Messages depending if private or group
     const sendMsg = () => {
-        const string = {msg: `${user.userName}: ${input}`, user: user.userName}
+        const string = {msg: `${user.username}: ${input}`, user: user.username}
         const tmpArray = [...msgHistory, string]  
         setMsgHistory(() => tmpArray)
         if (type=== 'groupChat'){
@@ -108,7 +108,7 @@ export default function Chat({location}) {
            {msgHistory ? msgHistory.map((element, index) => {
                 return(
                         <>
-                        {element.user === user.userName ?
+                        {element.user === user.username ?
                            <div className='bubble left'><p className='chatMsg'>{element.msg}</p></div> :
                            <div className='bubble right'><p className='chatMsg right'>{element.msg}</p></div>
                         }  

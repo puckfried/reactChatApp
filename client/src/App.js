@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useRef} from 'react'
 import {SocketContext, socket} from './context/socket.js'
 import { PeerContext, peer } from './context/peer.js';
 import { Route, Switch } from 'react-router-dom';
@@ -8,20 +8,23 @@ import {UserContext} from './context/user.js'
 import Chat from './Pages/Chat';
 import Main from './Pages/Main';
 import Login from './Pages/Login';
+import Signin from './Pages/SignIn';
 
 import Header from './Components/Header';
 import Footer from './Components/Footer';
 
 import Paper from '@mui/material/Paper';
-import { Grid } from '@mui/material';
+import { Grid, Box, Button } from '@mui/material';
 import PeerView from './Pages/Peer';
+import Add from './Pages/Add';
+import Sidebar from './Components/Sidebar';
 
 function App() {
    
   const {user} = useContext(UserContext)
-
+  const container = useRef(null)
   return (
-    <SocketContext.Provider value={socket}>
+    
      <PeerContext.Provider value={peer}>
       <Grid
         container
@@ -31,27 +34,32 @@ function App() {
         marginTop='5%'
         > 
 
-     <Grid item lg={6} md={8} xs={12} >
-      <Paper elevation='10' className='paper' sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between'}}>
+     <Grid item lg={8} md={10} xs={12} >
+      <Paper elevation={10} className='paper' sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between'}}>
        <Grid container item xs={12}> 
         <Header />
        </Grid>  
 
-       <Grid item xs={12}>  
+       <Grid container item xs={12} >  
         <Switch>
-         {user.username ?
-            <Route exact path='/' component={Main} /> :
+          {!user.username ? 
             <>
-            <Route exact path='/' component={Login} />
-            
+              <Route exact path='/signup' component={Signin} />
+              <Route exact path='/' component={Login} />
             </>
+            :
+            <SocketContext.Provider value={socket}>
+              <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap:'30px', flexWrap: 'wrap-reverse'}}> 
+                <Sidebar />
+                
+                <Route exact path='/' component={Main} />
+                <Route path='/chat'  component={Chat} />
+                <Route path='/peer' component={PeerView} />
+                <Route path='/add' component={Add} />
+              </Box>
+            </SocketContext.Provider>
+            
         }
-          
-          <Route path='/login' component={Login} />
-          
-           <Route path='/chat'  component={Chat} />
-        
-          <Route path='/peer' component={PeerView} />
         </Switch>
         </Grid>  
       
@@ -64,7 +72,7 @@ function App() {
 
     </Grid>
     </PeerContext.Provider>
-    </SocketContext.Provider>
+   
 
   );
 }

@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from "react";
-import { authenticateUser } from "../helpers/dbFunc";
+import { authenticateUser, registerUserDb } from "../helpers/dbFunc";
 
 
 export const UserContext = createContext()
@@ -7,13 +7,15 @@ export const UserContext = createContext()
 const UserProvider = ( {children} ) => {
     const [user, setUser] = useState({
         id: 0,
-        userName: "",
+        username: "",
         email: "",
         friends: []
     })
     
+    const [socketId, setSocketId] = useState(null)
+    const [friends, setFriends] = useState([])
     const [authIsDone, setAuthIsDone ] = useState(false)
-    const exportData = {user, setUser, authIsDone, setAuthIsDone}
+    const exportData = {user, setUser, authIsDone, setAuthIsDone, socketId, setSocketId, friends, setFriends}
 
 
     useEffect( () => {
@@ -22,12 +24,13 @@ const UserProvider = ( {children} ) => {
           const res = await authenticateUser();
   
           if (!res.error) {
+            // const register = await registerUserDb(res._id, )
+            console.log('User is set in CONTEXT', res)
             setUser(res);
             setAuthIsDone(true);
             return;
           }
-          setUser();
-          setAuthIsDone(true);
+
         } catch (error) {
             console.log(error)
         }

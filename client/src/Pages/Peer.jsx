@@ -3,6 +3,7 @@ import { SocketContext } from '../context/socket'
 import Peer from 'peerjs'
 import { Link, Redirect } from 'react-router-dom';
 import  Button  from '@mui/material/Button';
+import { Grid } from '@mui/material'
 
 
 export default function PeerView({location}) {
@@ -112,7 +113,7 @@ export default function PeerView({location}) {
        }
 
     return (
-        <div>
+        <Grid item margin="50px" >
              <h1>VideoChat with {friend}</h1>
              <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}} onClick={stopVideo}>
                 <p>BACK...</p>
@@ -122,6 +123,6 @@ export default function PeerView({location}) {
             <Button onClick={startVideo} variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Start Video</Button>
             <video style={{transform: "scaleX(-1)", height: '300px', width: '300px'}} ref={videoRef} onCanPlay={handleCanPlay} autoPlay playsInline muted />
             <video style={{display: 'none'}} ref={ownVideo} />
-        </div>
+        </Grid>
     )
 }

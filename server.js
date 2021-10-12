@@ -40,7 +40,14 @@ app.use('/user', userRoute)
 
 const http = app.listen(PORT, () => {console.log(`listening on Port${PORT}`)})
 
-
+app.use(function errorHandler(err, req, res, next) {
+    res.status(err.status || 400).send({
+      error: {
+        message: err.message,
+        status: err.status,
+      },
+    });
+  });
 
 //Socket setup
 const newSocketConnection = (socket) => {
@@ -99,8 +106,18 @@ const newSocketConnection = (socket) => {
     } 
 
 
-const io = new Server(http,{cors: {origin: '*'}})
-io.on('connection', newSocketConnection)
+export const io = new Server(http,{cors: {origin: '*'}})
+
+// app.set('socketio', io)
+
+// app.get('/server', (req,res) => {
+//     console.log('DOES THE ROUTE WORK??')
+//     const socketio = req.app.get('socketio')
+//     socketio.on('connection', newSocketConnection)
+//     res.send('sERVER RUNNING?')
+// })
+ io.on('connection', newSocketConnection)
+
 
 
 

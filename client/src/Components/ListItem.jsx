@@ -14,11 +14,13 @@ export default function ListItemComponent({user, index, ownId}) {
         <ListItem 
         alignItems="center" 
         key={index}
+        sx={{width: '80%', margin: '0 auto'}}
+
         secondaryAction={
             <>
             <Link to={{
                 pathname: `/chat/`,
-                state: {type: 'requestPrivatChat', to: user }
+                state: {type: 'requestPrivatChat', to: user.socketId}
                 }}
                  >
                 <IconButton edge="end" aria-label="comments" style={{color: 'green'}}>
@@ -28,7 +30,7 @@ export default function ListItemComponent({user, index, ownId}) {
             
             <Link to={{
                 pathname: `/peer/`,
-                state: {id: ownId, friend: user, type: 'requestVideo' }
+                state: {id: ownId, friend: user.socketId, type: 'requestVideo' }
                 }}
                 >
                 <IconButton edge="end" aria-label="comments" style={{color: 'red'}}>
@@ -43,7 +45,7 @@ export default function ListItemComponent({user, index, ownId}) {
             <Avatar alt="random Avatar" src="https://source.unsplash.com/200x200/?person" />
         </ListItemAvatar>
         <ListItemText
-            primary={user}
+            primary={user.username}
         />
     </ListItem>
     )

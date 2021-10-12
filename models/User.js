@@ -14,6 +14,7 @@ const UserSchema = new Schema(
       email: { type: String, unique: true, required: true },
       password: { type: String, required: true },
       avatar: {type: String},
+      socketId: {type: String},
       friends: [
         {friend: {
           type: Schema.Types.ObjectId,
