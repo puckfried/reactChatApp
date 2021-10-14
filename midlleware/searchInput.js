@@ -6,14 +6,11 @@ export const isEmail = () => {
         body('input')
             .trim()
             .isEmail()
-            
-     ) 
-}
+    )}
 
 export const prepareInput = (req, res, next) => {
     const errors = validationResult(req)
     const {input} = req.body
-    console.log('WHAT ARRIVES: ', input)
     if (errors.errors.length > 0) {
         req.search = {username: input}
         next()

@@ -17,7 +17,7 @@ if (process.env.NODE_ENV == 'production') {
         dotenv.config({path: envPath})
     } else dotenv.config()
 }
-// console.log('config running', process.env)
+
 
 
 const config = {
@@ -25,7 +25,9 @@ const config = {
     frontendOrigin: env.FRONTEND_ORIGIN_DEV || env.FRONTEND_ORIGIN_PROD,
     secretKey: env.SECRET_KEY_DEV || env.SECRET_KEY_PROD,
     mongooseUrl: env.MONGOOSE_DB_DEV || env.MONGOOSE_DB_PROD,
-    port: env.PORT_DEV || env.PORT_PROD
+    port: env.PORT_DEV || env.PORT_PROD,
+    ckSameSite: env.CKSAMESITE_DEV || env.SAMESITE_PROD,
+    ckSecure: env.CKSECURE_DEV || env.CKSECURE_PROD
 }
 console.log('config running', config)
 

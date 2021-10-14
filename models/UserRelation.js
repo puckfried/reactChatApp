@@ -20,10 +20,6 @@ const UserRelationSchema = new Schema(
     }
 );
 
-UserRelationSchema.post('save', function(doc){
-    const relation = this
-    console.log('REALTION MADE: ',  doc._id)
-})
 
 const UserRelation = model('UserRelation', UserRelationSchema); 
 

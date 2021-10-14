@@ -9,9 +9,8 @@ import Sidebar from '../Components/Sidebar';
 
 
 export default function Main() {
-    const {user, socketId, setSocketId, friends, setFriends} = useContext(UserContext)
+    const {user, setFriends} = useContext(UserContext)
     const socket = useContext(SocketContext)
-    const [activeUser, setActiveUser] = useState([])
     const [privateChat, setPrivateChat] = useState(false)
     const [privateVideo, setPrivateVideo] = useState(false)
     

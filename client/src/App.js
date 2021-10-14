@@ -1,7 +1,6 @@
 import './App.css';
-import React, {useState, useContext, useRef} from 'react'
+import React, {useContext} from 'react'
 import {SocketContext, socket} from './context/socket.js'
-import { PeerContext, peer } from './context/peer.js';
 import { Route, Switch } from 'react-router-dom';
 import {UserContext} from './context/user.js'
 
@@ -14,15 +13,13 @@ import Header from './Components/Header';
 import Footer from './Components/Footer';
 
 import Paper from '@mui/material/Paper';
-import { Grid, Box, Button } from '@mui/material';
+import { Grid, Box} from '@mui/material';
 import PeerView from './Pages/Peer';
 import Add from './Pages/Add';
-import Sidebar from './Components/Sidebar';
 
 function App() {
    
   const {user} = useContext(UserContext)
-  const container = useRef(null)
   return (
     
     //  <PeerContext.Provider value={peer}>

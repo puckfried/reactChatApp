@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from "react";
-import { authenticateUser, registerUserDb } from "../helpers/dbFunc";
+import { authenticateUser } from "../helpers/dbFunc";
 
 
 export const UserContext = createContext()

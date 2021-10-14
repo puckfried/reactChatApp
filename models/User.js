@@ -1,4 +1,3 @@
-// import '../config/config.js'
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 import jwt from 'jsonwebtoken';
@@ -43,13 +42,10 @@ UserSchema.pre('save', function (next) {
 
 
 UserSchema.methods.generateAuthToken = function () {
-    const user = this; // "this" is the user we called our method on
-  
-    // user._id + superSecret = token
+    const user = this; 
     const token = jwt.sign({ _id: user._id }, KEY, {
       expiresIn: '2d',
     });
-  
     console.log(`We created a token for user ${user._id} => ${token}`);
   
     return token;
@@ -59,9 +55,7 @@ UserSchema.methods.generateAuthToken = function () {
     const User = this;
   
     try {
-      // Verify the token
       let decoded = jwt.verify(token, KEY);
-      // See if a user with that id exists
       return User.findOne({ _id: decoded._id });
     } catch (error) {
       return;
@@ -69,6 +63,5 @@ UserSchema.methods.generateAuthToken = function () {
   };
   
 
-const User = model('User', UserSchema); // => todos
-
+const User = model('User', UserSchema); 
 export default User;

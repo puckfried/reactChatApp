@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import PersonIcon from '@mui/icons-material/Person';
 
-import React, {useState, useContext, useEffect} from 'react'
+import React, {useContext, useEffect} from 'react'
 
 import { searchOnlineFriends } from '../helpers/dbFunc';
 
@@ -26,9 +26,10 @@ export default function Sidebar() {
         const friendsOnline = await searchOnlineFriends(user._id, filterList)
         setFriends(() => friendsOnline)
     }
+    
     //Eventlistener on server signal, when fired -> refreshing the Friends List 
     useEffect(() => {
-        socket.on('handshake', refreshFriends)
+        socket.on('handshake',refreshFriends)
     }, [socket])    
 
 
@@ -39,7 +40,7 @@ export default function Sidebar() {
             <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
             {friends && friends.online.map((element, index) => {
                 return(
-                    <ListItemComponent user={element} index={index} ownId={socket.id}/>
+                    <ListItemComponent key={index} user={element} index={index} ownId={socket.id}/>
                 )
             })}
             <Divider variant="inset" component="li" />
@@ -48,14 +49,15 @@ export default function Sidebar() {
             <List sx={{ width: '90%', bgcolor: 'background.paper', margin: '0 auto' }}>
             {friends && friends.offline.map((element, index) => {
                 return(
-                    <ListItem>
-                        <ListItemAvatar>
-                            <Avatar>
-                                <PersonIcon />
+                    <ListItem key={`List-${index}`}>
+                        <ListItemAvatar key={`ListA-${index}`} >
+                            <Avatar key={`Avatar_${index}`}>
+                                <PersonIcon key={`icon_${index}`}/>
                             </Avatar>
                         </ListItemAvatar>
                         <ListItemText
                             primary={element.username}
+                            key={`ListText_${index}`}
                         />
                     </ListItem>
                     )

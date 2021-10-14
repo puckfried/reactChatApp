@@ -1,10 +1,8 @@
-// import './config/config.js'
 import express from 'express';
 import cors from 'cors'
 import {Server} from 'socket.io'
 import { ExpressPeerServer } from 'peer';
 import cookieParser from 'cookie-parser';
-import createError from 'http-errors';
 import mongoose from 'mongoose';
 import userRoute from './routes/userRoute.js'
 import config from './config/config.js'
@@ -110,22 +108,15 @@ const newSocketConnection = (socket) => {
 
 export const io = new Server(http,{cors: {origin: '*'}})
 
-// app.set('socketio', io)
-
-// app.get('/server', (req,res) => {
-//     console.log('DOES THE ROUTE WORK??')
-//     const socketio = req.app.get('socketio')
-//     socketio.on('connection', newSocketConnection)
-//     res.send('sERVER RUNNING?')
-// })
- io.on('connection', newSocketConnection)
-
-
+//When socket Connection established - start listeners
+io.on('connection', newSocketConnection)
 
 
 //Peer Server
 const peerServer = ExpressPeerServer(http, {
-    path: '/myapp'
+  debug: true,
+  allow_discovery: true,  
+  
 })
 
 

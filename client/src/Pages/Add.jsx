@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import { Grid, Box, TextField, FormControl, Button } from '@mui/material'
+import { Grid, Box, TextField, Button } from '@mui/material'
 import { UserContext } from '../context/user'
 import { findUser, listFriends, sendAddFriend } from '../helpers/dbFunc'
 import { SocketContext } from '../context/socket'
@@ -9,7 +9,7 @@ import BackButton from '../Components/backButton'
 
 export default function Add() {
     const [userInput, setUserInput] = useState('')
-    const {user, setUser} = useContext(UserContext)
+    const {user} = useContext(UserContext)
     const [friend, setFriend] = useState('')
     const [double, setDouble] = useState(false)
     const socket = useContext(SocketContext)
@@ -38,7 +38,6 @@ export default function Add() {
         e.preventDefault()
         const addFriend = async() => {
             const addFriend = await sendAddFriend(user._id, friend._id)
-            
         }
         addFriend()
         setFriend('')

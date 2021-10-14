@@ -2,7 +2,6 @@ import React, {useEffect, useContext, useState} from 'react'
 import { Link } from 'react-router-dom';
 import { SocketContext } from '../context/socket'
 import { UserContext } from '../context/user';
-import  Button  from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
@@ -107,7 +106,7 @@ export default function Chat({location}) {
            <>
            <Box className='chatWrapper' sx={{maxWidth: '800px', margin: '0 auto', textAlign: 'center'}}>
            
-           {type == 'groupChat' ? <h3>Group Chat</h3> :
+           {type === 'groupChat' ? <h3>Group Chat</h3> :
            <h3>Private Chat with {friend}</h3>
            }
            

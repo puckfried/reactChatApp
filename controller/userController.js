@@ -2,7 +2,8 @@ import createError from 'http-errors';
 import User from '../models/User.js';
 import bcryptjs from 'bcryptjs';
 import UserRelation from '../models/UserRelation.js';
-import { io } from '../server.js';
+import config from '../config/config.js'
+
 
 export const addUser = async (req, res, next) => {
     const info = req.body;
@@ -15,8 +16,8 @@ export const addUser = async (req, res, next) => {
       res
       .cookie('token', token, {
         expires: new Date(Date.now() + 172800000),
-        sameSite: 'lax',
-        secure: false,  //http on localhost, https on production,
+        sameSite: config.ckSameSite,
+        secure: config.ckSecure,  //http on localhost, https on production,
         httpOnly: true,
       })
         .send(user);
@@ -34,7 +35,7 @@ export const addUser = async (req, res, next) => {
       next(error)
     }
   }
-
+//HERE IS PW HASH SENT BACK CORRECT THIS
   export const loginUser = async (req, res, next) => {
     console.log('LOGIN REQUESTED: ', req.body)  
     try {
@@ -50,8 +51,8 @@ export const addUser = async (req, res, next) => {
         res
           .cookie('token', token, {
             expires: new Date(Date.now() + 172800000),
-            sameSite: 'lax',
-            secure: false,  //http on localhost, https on production,
+            sameSite: config.ckSameSite,
+            secure: config.ckSecure,  //http on localhost, https on production,
             httpOnly: true,
           })
           .send(user);

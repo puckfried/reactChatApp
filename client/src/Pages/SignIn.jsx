@@ -1,4 +1,4 @@
-import React,{useState, useRef} from 'react'
+import React,{useState} from 'react'
 import { Grid, Box, TextField, FormControl, Button, Alert } from '@mui/material'
 import { addNewUser } from '../helpers/dbFunc'
 import { Redirect } from 'react-router'
@@ -11,7 +11,6 @@ export default function SignIn() {
     const [lastName, setLastName]   = useState('')
     const [email, setEmail]         = useState('')
     
-    const [alert, setAlert]         = useState(false)
     const [error, setError]         = useState(null)
     const [done, setDone]           = useState(false)
 
