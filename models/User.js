@@ -1,10 +1,11 @@
+// import '../config/config.js'
 import mongoose from 'mongoose';
 const { Schema, model } = mongoose;
 import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
+import config from '../config/config.js'
 
-
-const KEY = 'Secret'
+const KEY = config.secretKey
 
 const UserSchema = new Schema(
     {

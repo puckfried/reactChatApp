@@ -25,7 +25,7 @@ function App() {
   const container = useRef(null)
   return (
     
-     <PeerContext.Provider value={peer}>
+    //  <PeerContext.Provider value={peer}>
       <Grid
         container
         direction="row"
@@ -49,13 +49,13 @@ function App() {
             </>
             :
             <SocketContext.Provider value={socket}>
-              <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap:'30px', flexWrap: 'wrap-reverse'}}> 
-                <Sidebar />
-                
-                <Route exact path='/' component={Main} />
+              <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap:'30px', flexWrap: 'nowrap'}}> 
+             
                 <Route path='/chat'  component={Chat} />
                 <Route path='/peer' component={PeerView} />
                 <Route path='/add' component={Add} />
+                <Route exact path='/' component={Main} />
+
               </Box>
             </SocketContext.Provider>
             
@@ -71,7 +71,7 @@ function App() {
        </Grid>
 
     </Grid>
-    </PeerContext.Provider>
+    // </PeerContext.Provider>
    
 
   );

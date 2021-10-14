@@ -5,6 +5,8 @@ import { UserContext } from '../context/user';
 import { Button, Stack } from '@mui/material';
 import { Grid } from '@mui/material'
 import { registerUserDb, searchOnlineFriends } from '../helpers/dbFunc';
+import Sidebar from '../Components/Sidebar';
+
 
 export default function Main() {
     const {user, socketId, setSocketId, friends, setFriends} = useContext(UserContext)
@@ -46,7 +48,7 @@ export default function Main() {
 
 
     useEffect(() => {
-        socket.on('handshake', handleShake)
+        // socket.on('handshake', handleShake)
         socket.on('chatRequest', handleprivatRequest)
         socket.on('videoRequest', handleVideoRequest)
         return () => {
@@ -57,6 +59,8 @@ export default function Main() {
     
     
     return (
+        <>
+        <Sidebar />
         <Grid item margin="50px" >
             <h3>Welcome back {user.username}</h3>
             
@@ -73,17 +77,18 @@ export default function Main() {
                     pathname: `/chat/`,
                     state: {type: 'acceptPrivateRequest', to: privateRequest}
                     }} style={{textDecoration: 'none'}}>
-                    <Button variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
+                    <Button variant="contained"  sx={{ margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
             
             {privateVideo ? 
                 <Link to={{
                     pathname: `/peer/`,
                     state: {id: socket.id, friend: privateRequest }
                     }} style={{textDecoration: 'none'}}>
-                    <Button variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
+                    <Button variant="contained" sx={{ margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
 
             
             </Stack>
         </Grid>
+        </>
     )
 }

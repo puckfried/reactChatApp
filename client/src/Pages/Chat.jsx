@@ -9,7 +9,8 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { Grid } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send';
-
+import BackButton from '../Components/backButton';
+import { Box } from '@mui/system';
 
 
 
@@ -91,8 +92,9 @@ export default function Chat({location}) {
 
     
     return (
-        <Grid item margin='50px'>
+        <Grid item margin='50px' sx={{width: "100%"}}>
             {/* Private ROOM must be be closed here */}
+            <BackButton />
             <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}}>
                 <p>BACK...</p>
             </Link>
@@ -103,8 +105,12 @@ export default function Chat({location}) {
            </>
            :
            <>
-           <h3>private chat with {friend}</h3>
-           <div className='chatWrapper'>
+           <Box className='chatWrapper' sx={{maxWidth: '800px', margin: '0 auto', textAlign: 'center'}}>
+           
+           {type == 'groupChat' ? <h3>Group Chat</h3> :
+           <h3>Private Chat with {friend}</h3>
+           }
+           
            {msgHistory ? msgHistory.map((element, index) => {
                 return(
                         <>
@@ -117,14 +123,14 @@ export default function Chat({location}) {
 
                     })
                 : <></>}
-           </div>
+           
 
            <Paper
             component="form"
             sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
             >
             <InputBase
-                sx={{ ml: 1, flex: 1 }}
+                sx={{ ml: 1, flex: 1, marginTop: '50px' }}
                 placeholder="Your message"
                 inputProps={{ 'aria-label': 'search google maps' }}
                 value={input} 
@@ -136,6 +142,7 @@ export default function Chat({location}) {
             </IconButton>
          
            </Paper>
+           </Box>
            </>
             }
         </Grid>

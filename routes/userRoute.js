@@ -11,8 +11,8 @@ router.route('/signin').post(userValidationRules(), userValidationErrorHandling,
 router.route('/login').post(loginUser)
 router.route('/logout').get(logout)
 router.route('/auth').post(auth, verifyCookie)
-router.route('/:id/register').post(updateUserById)
-router.route('/:id/findfriend').post(isEmail(), prepareInput, findUser)
-router.route('/:id/addfriend').post(addFriend)
-router.route('/:id/findrelations').post(findRelations)
+router.route('/:id/register').post(auth, updateUserById)
+router.route('/:id/findfriend').post(auth, isEmail(), prepareInput, findUser)
+router.route('/:id/addfriend').post(auth, addFriend)
+router.route('/:id/findrelations').post(auth, findRelations)
 export default router

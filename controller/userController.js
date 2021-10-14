@@ -67,7 +67,6 @@ export const addUser = async (req, res, next) => {
       try {
         const data = {userA: userId, userB: friendId}
         const addToRelations = await UserRelation.create(data)
-        
         res.send(addToRelations)
       }
       catch(error){

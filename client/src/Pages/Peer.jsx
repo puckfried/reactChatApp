@@ -4,6 +4,7 @@ import Peer from 'peerjs'
 import { Link, Redirect } from 'react-router-dom';
 import  Button  from '@mui/material/Button';
 import { Grid } from '@mui/material'
+import BackButton from '../Components/backButton';
 
 
 export default function PeerView({location}) {
@@ -111,13 +112,14 @@ export default function PeerView({location}) {
     const handleCanPlay = () => {
         videoRef.current.play()
        }
-
-    return (
+       console.log('THE VIDEO REF: ', videoRef.current)
+       return (
         <Grid item margin="50px" >
              <h1>VideoChat with {friend}</h1>
-             <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}} onClick={stopVideo}>
-                <p>BACK...</p>
-            </Link>
+             <BackButton stopVideo={stopVideo} />
+             {/* <Link to={{pathname: `/`}}  style={{textDecoration: 'none', color: 'black'}} onClick={stopVideo}>
+                <h3>BACK...really</h3>
+            </Link> */}
              {!connected && <h3>Please wait for your video peer... Again a spinner would be great!</h3>}   
         
             <Button onClick={startVideo} variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Start Video</Button>

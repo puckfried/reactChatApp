@@ -13,7 +13,8 @@ const UserProvider = ( {children} ) => {
     })
     
     const [socketId, setSocketId] = useState(null)
-    const [friends, setFriends] = useState([])
+    const [friends, setFriends] = useState(null)
+
     const [authIsDone, setAuthIsDone ] = useState(false)
     const exportData = {user, setUser, authIsDone, setAuthIsDone, socketId, setSocketId, friends, setFriends}
 

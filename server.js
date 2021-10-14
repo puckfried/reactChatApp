@@ -1,4 +1,4 @@
-import './config.js'
+// import './config/config.js'
 import express from 'express';
 import cors from 'cors'
 import {Server} from 'socket.io'
@@ -7,10 +7,12 @@ import cookieParser from 'cookie-parser';
 import createError from 'http-errors';
 import mongoose from 'mongoose';
 import userRoute from './routes/userRoute.js'
+import config from './config/config.js'
+
 
 //mongoose Setup
 mongoose
-  .connect('mongodb://localhost:27017/chatApp', {
+  .connect(config.mongooseUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -25,11 +27,11 @@ mongoose
 const app = express()
 
 
-const PORT = process.env.PORT
+const PORT = config.port
 
 app.use( express.json())
 
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: config.frontendOrigin, credentials: true }));
 app.use(cookieParser());
 
 app.get('/', (req, res) => {
