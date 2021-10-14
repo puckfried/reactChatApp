@@ -7,7 +7,6 @@ export const userValidationRules = () => {
             .trim()
             .isEmail()
             .withMessage('Not a valid email')
-            .normalizeEmail(),
         // body('password')
         //     .isStrongPassword({
         //         minLength: 5,

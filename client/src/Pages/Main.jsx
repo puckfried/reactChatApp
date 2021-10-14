@@ -3,23 +3,23 @@ import { Link } from 'react-router-dom';
 import { SocketContext } from '../context/socket'
 import { UserContext } from '../context/user';
 import { Button, Stack } from '@mui/material';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import { Grid } from '@mui/material'
-import ListItemComponent from '../Components/ListItem';
+import { registerUserDb, searchOnlineFriends } from '../helpers/dbFunc';
+import Sidebar from '../Components/Sidebar';
+
 
 export default function Main() {
-    const {user} = useContext(UserContext)
+    const {user, setFriends} = useContext(UserContext)
     const socket = useContext(SocketContext)
-    const [activeUser, setActiveUser] = useState([])
     const [privateChat, setPrivateChat] = useState(false)
     const [privateVideo, setPrivateVideo] = useState(false)
     
     const [privateRequest, setPrivateRequest] = useState('')
 
-    const handleShake = data => {
+    const handleShake = async (data) => {
         const filterList = data.filter((element) => element !== socket.id)
-        setActiveUser(() => filterList)
+        const friendsOnline = await searchOnlineFriends(user._id, filterList)
+        setFriends(() => friendsOnline)
     }
 
     const handleprivatRequest = (data) => {
@@ -35,12 +35,19 @@ export default function Main() {
     }
 
     useEffect(() =>  {
-        socket.emit('register', user)
-    },[])
+        const database = async() => {
+            const result = await registerUserDb(user._id, socket.id)
+            console.log(result, ' this went into database!!')
+            if (!result.error){
+                socket.emit('register', 'wait')}
+            return
+            }
+        if (socket.id) database()
+    },[socket.id])
 
 
     useEffect(() => {
-        socket.on('handshake', handleShake)
+        // socket.on('handshake', handleShake)
         socket.on('chatRequest', handleprivatRequest)
         socket.on('videoRequest', handleVideoRequest)
         return () => {
@@ -51,43 +58,36 @@ export default function Main() {
     
     
     return (
+        <>
+        <Sidebar />
         <Grid item margin="50px" >
             <h3>Welcome back {user.username}</h3>
-            <p>Other Socks online:</p>
-            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                {activeUser.map((element, index) => {
-                    return( 
-                            <>
-                                <ListItemComponent user={element} index={index} ownId={socket.id}/>
-                                <Divider variant="inset" component="li" />
-                            </>
-                    )
-                })}
-            </List>
             
             <Stack direction="row" spacing={2}>
             <Link to={{
-                            pathname: `/chat/`,
-                            state: {type: 'groupChat', to: 'group'}
-                        }} style={{textDecoration: 'none'}}>
-                           <Button variant="contained" sx={{backgroundColor: '#5885AF', margin: '30px'}}>Group Chat</Button></Link>
+                        pathname: `/chat/`,
+                        state: {type: 'groupChat', to: 'group'}
+                        }} 
+                        style={{textDecoration: 'none'}}>
+                <Button variant="contained" sx={{backgroundColor: '#5885AF', margin: '30px'}}>Group Chat</Button></Link>
             
             {privateChat ? 
                 <Link to={{
                     pathname: `/chat/`,
                     state: {type: 'acceptPrivateRequest', to: privateRequest}
                     }} style={{textDecoration: 'none'}}>
-                    <Button variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
+                    <Button variant="contained"  sx={{ margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
             
             {privateVideo ? 
                 <Link to={{
                     pathname: `/peer/`,
                     state: {id: socket.id, friend: privateRequest }
                     }} style={{textDecoration: 'none'}}>
-                    <Button variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
+                    <Button variant="contained" sx={{ margin: '30px'}} color="success">Accept Private Invitation</Button></Link> : <></> }
 
             
             </Stack>
         </Grid>
+        </>
     )
 }

@@ -2,14 +2,14 @@ import React, {useEffect, useContext, useState} from 'react'
 import { Link } from 'react-router-dom';
 import { SocketContext } from '../context/socket'
 import { UserContext } from '../context/user';
-import  Button  from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import { Grid } from '@mui/material'
 import SendIcon from '@mui/icons-material/Send';
-
+import BackButton from '../Components/backButton';
+import { Box } from '@mui/system';
 
 
 
@@ -28,7 +28,7 @@ export default function Chat({location}) {
 
     //sending Messages depending if private or group
     const sendMsg = () => {
-        const string = {msg: `${user.userName}: ${input}`, user: user.userName}
+        const string = {msg: `${user.username}: ${input}`, user: user.username}
         const tmpArray = [...msgHistory, string]  
         setMsgHistory(() => tmpArray)
         if (type=== 'groupChat'){
@@ -91,8 +91,9 @@ export default function Chat({location}) {
 
     
     return (
-        <Grid item margin='50px'>
+        <Grid item margin='50px' sx={{width: "100%"}}>
             {/* Private ROOM must be be closed here */}
+            <BackButton />
             <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}}>
                 <p>BACK...</p>
             </Link>
@@ -103,12 +104,16 @@ export default function Chat({location}) {
            </>
            :
            <>
-           <h3>private chat with {friend}</h3>
-           <div className='chatWrapper'>
+           <Box className='chatWrapper' sx={{maxWidth: '800px', margin: '0 auto', textAlign: 'center'}}>
+           
+           {type === 'groupChat' ? <h3>Group Chat</h3> :
+           <h3>Private Chat with {friend}</h3>
+           }
+           
            {msgHistory ? msgHistory.map((element, index) => {
                 return(
                         <>
-                        {element.user === user.userName ?
+                        {element.user === user.username ?
                            <div className='bubble left'><p className='chatMsg'>{element.msg}</p></div> :
                            <div className='bubble right'><p className='chatMsg right'>{element.msg}</p></div>
                         }  
@@ -117,14 +122,14 @@ export default function Chat({location}) {
 
                     })
                 : <></>}
-           </div>
+           
 
            <Paper
             component="form"
             sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
             >
             <InputBase
-                sx={{ ml: 1, flex: 1 }}
+                sx={{ ml: 1, flex: 1, marginTop: '50px' }}
                 placeholder="Your message"
                 inputProps={{ 'aria-label': 'search google maps' }}
                 value={input} 
@@ -136,6 +141,7 @@ export default function Chat({location}) {
             </IconButton>
          
            </Paper>
+           </Box>
            </>
             }
         </Grid>

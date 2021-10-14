@@ -2,6 +2,9 @@ import React, {useState, useContext} from 'react'
 import { Grid, Box, TextField, FormControl, Button } from '@mui/material'
 import { UserContext } from '../context/user'
 import {loginUser} from '../helpers/dbFunc.js'
+import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 
 function Login() {
     
@@ -11,15 +14,21 @@ function Login() {
     
     const handleSubmit = (e) => {
         e.preventDefault()
-        const data = loginUser(userInput, pwInput)
-        setUser(data)
-        console.log(userInput, data)
+        const handleLogin = async() => {
+            const data = await loginUser(userInput, pwInput)
+            setUser(data)
+        }
+        handleLogin()
     }
-    
+
+    console.log(user.username, ' WHY DO YOU NOT DO ANYTHING???')
     return (
+        <>
+        {user.username ? <Redirect to="/" /> :
+        
         <Grid item margin="50px">
             <h2>Login Page</h2>
-            <p>Please login to use our service. If you have no account yet, visit our SignUp Page or follow the Link fom your invitation mail.</p>
+            <p>Please login to use our service. If you have no account yet, visit our <Link to='/signup' style={{color: 'blue', textDecoration: 'underline'}}>SignUp Page</Link> or follow the Link of your invitation mail. You have no invitation, probably you have no friends.</p>
             <Box
                 component="form"
                 sx={{'& .MuiTextField-root': { m: 2, width: '25ch' },
@@ -45,6 +54,8 @@ function Login() {
             </Box>
         
         </Grid>
+    }
+    </>
     )
 }
 

@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState, useContext } from 'react'
 import { SocketContext } from '../context/socket'
 import Peer from 'peerjs'
-import { Link, Redirect } from 'react-router-dom';
 import  Button  from '@mui/material/Button';
+import { Grid } from '@mui/material'
+import BackButton from '../Components/backButton';
 
 
 export default function PeerView({location}) {
@@ -10,7 +11,22 @@ export default function PeerView({location}) {
     const peer = useRef(null)
     const {state} = location  
     const {id, friend, type} = state
-    
+    const options = {
+        host: 'serene-river-49929.herokuapp.com',
+        secure: 'true',
+        port: '',
+        path: '/peerjs'
+    }
+
+    // const optionsLocal = {
+    //     host: 'localhost',
+    //     port: 5000,
+    //     path: '/peerjs',
+    //     config: {
+    //         'iceServers': [
+    //         {url: 'stun:stun.l.google.com:19302'}
+    //     ]}
+    // }
 
     const [connected, setConnected] = useState(false)
     const connectionRef = useRef(null)
@@ -68,14 +84,17 @@ export default function PeerView({location}) {
         if (type==='requestVideo'){
             socket.emit('private', {theOther: friend, type: 'videoRequest'})}
         
-        peer.current= new Peer(id, {
-            host: 'localhost',
-            port: 5000,
-            path: '/peerjs/myapp',
-            config: {'iceServers': [
-                {url: 'stun:stun.l.google.com:19302'}
-            ]}
-        })
+        // peer.current= new Peer(id, {
+        //     host: 'localhost',
+        //     port: 5000,
+        //     path: '/peerjs',
+        //     config: {'iceServers': [
+        //         {url: 'stun:stun.l.google.com:19302'}
+        //     ]}
+        // })
+
+        peer.current= new Peer(id, options)
+
         //PEERJS Error handler
         peer.current.on('error', function(error){
             console.log('EEEERRRRRORRRRR: ', error)
@@ -110,18 +129,19 @@ export default function PeerView({location}) {
     const handleCanPlay = () => {
         videoRef.current.play()
        }
-
-    return (
-        <div>
+       console.log('THE VIDEO REF: ', videoRef.current)
+       return (
+        <Grid item margin="50px" >
              <h1>VideoChat with {friend}</h1>
-             <Link to={{pathname: `/`}}  style={{textDecoration: 'none'}} onClick={stopVideo}>
-                <p>BACK...</p>
-            </Link>
+             <BackButton stopVideo={stopVideo} />
+             {/* <Link to={{pathname: `/`}}  style={{textDecoration: 'none', color: 'black'}} onClick={stopVideo}>
+                <h3>BACK...really</h3>
+            </Link> */}
              {!connected && <h3>Please wait for your video peer... Again a spinner would be great!</h3>}   
         
             <Button onClick={startVideo} variant="contained"  sx={{backgroundColor: '#5885AF', margin: '30px'}} color="success">Start Video</Button>
             <video style={{transform: "scaleX(-1)", height: '300px', width: '300px'}} ref={videoRef} onCanPlay={handleCanPlay} autoPlay playsInline muted />
             <video style={{display: 'none'}} ref={ownVideo} />
-        </div>
+        </Grid>
     )
 }
