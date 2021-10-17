@@ -16,8 +16,8 @@ function Login() {
         e.preventDefault()
         const handleLogin = async() => {
             const data = await loginUser(userInput, pwInput)
-            setAuthIsDone(true)
             setUser(data)
+            setAuthIsDone(true)
         }
         handleLogin()
     }

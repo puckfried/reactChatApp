@@ -2,10 +2,10 @@ import express from 'express';
 const router = express.Router();
 
 import {addUser, loginUser, verifyCookie, addFriend, findRelations, updateUserById, findUser, logout} from '../controller/userController.js'
-import {userValidationRules, userValidationErrorHandling} from '../midlleware/validation/userValidation.js'
+import {userValidationRules, userValidationErrorHandling} from '../middleware/validation/userValidation.js'
 
-import auth from '../midlleware/authentication/authentication.js'
-import {isEmail, prepareInput} from '../midlleware/searchInput.js';
+import auth from '../middleware/authentication/authentication.js'
+import {isEmail, prepareInput} from '../middleware/searchInput.js';
 
 router.route('/signin').post(userValidationRules(), userValidationErrorHandling, addUser)
 router.route('/login').post(loginUser)

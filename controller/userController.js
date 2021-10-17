@@ -46,7 +46,7 @@ export const addUser = async (req, res, next) => {
         const passwordIsValid = bcryptjs.compareSync(password, user.password);
         if(!passwordIsValid) next(createError(404, `Password is not valid`));
         const token = user.generateAuthToken();
-
+        const dataBack = {username: user.username, _id: user._id, socketId: user.socketId}
         
         res
           .cookie('token', token, {
@@ -55,7 +55,7 @@ export const addUser = async (req, res, next) => {
             secure: config.ckSecure,  //http on localhost, https on production,
             httpOnly: true,
           })
-          .send(user);
+          .send(dataBack);
     }  catch(error){
         next(error)
         }

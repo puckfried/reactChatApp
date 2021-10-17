@@ -35,6 +35,7 @@ export default function Main() {
     }
 
     useEffect(() =>  {
+        console.log('USER', user)
         const database = async() => {
             const result = await registerUserDb(user._id, socket.id)
             console.log(result, ' this went into database!!')
