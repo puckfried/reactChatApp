@@ -9,10 +9,11 @@ import { UserContext } from '../context/user';
 
 export default function Header() {
     
-    const {user, setUser} = useContext(UserContext)
+    const {user, setUser, authIsDone, setAuthIsDone} = useContext(UserContext)
 
     const handleClick = () => {
         logout()
+        setAuthIsDone(false)
         setUser({
             id: 0,
             username: "",
@@ -25,7 +26,7 @@ export default function Header() {
             <Link to="/"><h2>Socket Friends</h2></Link>
             {user.username ? 
                 <ExitToAppIcon onClick={handleClick}/>:
-                <PersonOutlineIcon /> 
+                <Link to='/login'> <PersonOutlineIcon /></Link> 
             }
         </Grid>
         

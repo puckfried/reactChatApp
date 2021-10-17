@@ -10,21 +10,21 @@ function Login() {
     
     const [userInput, setUserInput] = useState('')
     const [pwInput, setPwInput] = useState('')
-    const {user, setUser} = useContext(UserContext)
+    const {user, setUser, authIsDone,setAuthIsDone} = useContext(UserContext)
     
     const handleSubmit = (e) => {
         e.preventDefault()
         const handleLogin = async() => {
             const data = await loginUser(userInput, pwInput)
+            setAuthIsDone(true)
             setUser(data)
         }
         handleLogin()
     }
 
-    console.log(user.username, ' WHY DO YOU NOT DO ANYTHING???')
     return (
         <>
-        {user.username ? <Redirect to="/" /> :
+        {authIsDone ? <Redirect to="/" /> :
         
         <Grid item margin="50px">
             <h2>Login Page</h2>

@@ -1,6 +1,6 @@
 
-// const serverUrl = 'http://localhost:5000'
-const serverUrl = 'https://serene-river-49929.herokuapp.com'
+const serverUrl = 'http://localhost:5000'
+// const serverUrl = 'https://serene-river-49929.herokuapp.com'
 
 export const loginUser = async (user, pw) => {
     const data = {
@@ -24,7 +24,6 @@ export const loginUser = async (user, pw) => {
   };
   
 export const addNewUser = async(data) => {
-  console.log(data, 'ARRIVED')
   try {
     const res = await (
       await fetch(`${serverUrl}/user/signin`, {

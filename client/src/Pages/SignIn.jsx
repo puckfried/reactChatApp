@@ -1,7 +1,9 @@
-import React,{useState} from 'react'
+import React,{useState, useContext} from 'react'
 import { Grid, Box, TextField, FormControl, Button, Alert } from '@mui/material'
-import { addNewUser } from '../helpers/dbFunc'
+import { addNewUser, authenticateUser } from '../helpers/dbFunc'
 import { Redirect } from 'react-router'
+import { UserContext } from '../context/user'
+
 
 export default function SignIn() {
     
@@ -13,6 +15,8 @@ export default function SignIn() {
     
     const [error, setError]         = useState(null)
     const [done, setDone]           = useState(false)
+    const {user, setUser, authIsDone, setAuthIsDone} = useContext(UserContext)
+
 
     const handleSubmit = async(e) => {
         e.preventDefault()
@@ -20,12 +24,25 @@ export default function SignIn() {
         const result = await addNewUser(data)    
         if (result.error){
             setError(result.error.message)
-        } else {setDone(true)}
+        } else {
+            try {
+                const login = await authenticateUser();
+                console.log(login)
+                if (!login.error) {
+                  setUser(login);
+                  setAuthIsDone(true);
+                  console.log('SHould set auth to true', authIsDone)
+                  return;
+                }
+      
+              } catch (error) {
+                  setError(error)
+              }
+        }
     } 
-    
     return (
          <Grid item margin="50px">
-            {done && <Redirect to='/' />}
+            {user.username ? <Redirect to="/" /> : <></>}
             <h2>Login Page</h2>
             <p>Please give us your Data we collect and want to have more, please fill out all the fields as they are mandatory...</p>
             {error && <Alert severity="error">{error}</Alert>}

@@ -1,13 +1,15 @@
 import './App.css';
 import React, {useContext} from 'react'
 import {SocketContext, socket} from './context/socket.js'
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import {UserContext} from './context/user.js'
 
 import Chat from './Pages/Chat';
 import Main from './Pages/Main';
 import Login from './Pages/Login';
 import Signin from './Pages/SignIn';
+import PrivateRoute from './Components/PrivateRoute';
+import PublicRoute from './Components/PublicRoute';
 
 import Header from './Components/Header';
 import Footer from './Components/Footer';
@@ -38,26 +40,20 @@ function App() {
        </Grid>  
 
        <Grid container item xs={12} >  
+       <SocketContext.Provider value={socket}>
+       <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap:'30px', flexWrap: 'nowrap'}}> 
         <Switch>
-          {!user.username ? 
-            <>
-              <Route exact path='/signup' component={Signin} />
-              <Route exact path='/' component={Login} />
-            </>
-            :
-            <SocketContext.Provider value={socket}>
-              <Box sx={{width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap:'30px', flexWrap: 'nowrap'}}> 
-             
-                <Route path='/chat'  component={Chat} />
-                <Route path='/peer' component={PeerView} />
-                <Route path='/add' component={Add} />
-                <Route exact path='/' component={Main} />
-
-              </Box>
-            </SocketContext.Provider>
-            
-        }
+              <PublicRoute restricted={false} component={Login} path="/login" exact />
+              <PublicRoute restricted={false} component={Signin} path="/signup" exact />
+        
+                <PrivateRoute component={PeerView} path="/peer" exact />
+                <PrivateRoute component={Add} path="/add" exact />
+                <PrivateRoute component={Chat} path="/chat" exact />
+                <PrivateRoute component={Main} path="/" exact />
+            <Redirect to='/' />
         </Switch>
+        </Box>
+        </SocketContext.Provider>
         </Grid>  
       
         <Grid container item xs={12}> 
